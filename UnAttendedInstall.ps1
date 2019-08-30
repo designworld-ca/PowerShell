@@ -10,7 +10,7 @@ if($lang.Name -notin "en-CA", "en-US" )
 }
 
 # The command to pass to cmd.exe /c
-$var = '\\cirrus-share1.istc-inf.local\DBA\Scripts\OracleClient\Software\win32_12201_client\client32\setup.exe -ignoreSysPrereqs -showProgress -silent -nowait -responseFile "\\cirrus-share1.istc-inf.local\DBA\Scripts\OracleClient\Software\win32_12201_client\client32\response\client32.rsp"'
+$var = '<filepath>\win32_12201_client\client32\setup.exe -ignoreSysPrereqs -showProgress -silent -nowait -responseFile "\\cirrus-share1.istc-inf.local\DBA\Scripts\OracleClient\Software\win32_12201_client\client32\response\client32.rsp"'
 
 Write-Output 'Start the 32 bit process process asynchronously, in a new window'
 # as the current user with elevation (administrative rights).
@@ -23,7 +23,7 @@ if($p.ExitCode -notin "0", "259" )
 Write-Output 'Finished the 32 bit install, Logs at C:\Program Files (x86)\Oracle\Inventory\logs'
 
 # The command to pass to cmd.exe /c
-$var2 = '\\cirrus-share1.istc-inf.local\DBA\Scripts\OracleClient\Software\winx64_12201_client\client\setup.exe -ignoreSysPrereqs -showProgress -silent -nowait -responseFile "\\cirrus-share1.istc-inf.local\DBA\Scripts\OracleClient\Software\winx64_12201_client\client\response\client64.rsp"'
+$var2 = '<filepath>\winx64_12201_client\client\setup.exe -ignoreSysPrereqs -showProgress -silent -nowait -responseFile "<filepath>\winx64_12201_client\client\response\client64.rsp"'
 
 Write-Output 'Start the 64 bit process process asynchronously, in a new window'
 # as the current user with elevation (administrative rights).
@@ -41,24 +41,24 @@ If(!(test-path $path))
 {
       New-Item -ItemType Directory -Force -Path $path
 }
-Copy-Item -Path "\\cirrus-share1.istc-inf.local\DBA\TNS_ADMIN\tnsnames.ora" -Destination "C:\TNSMaster\tnsnames.ora" -Force;
-Copy-Item -Path "\\cirrus-share1.istc-inf.local\DBA\TNS_ADMIN\sqlnet.ora" -Destination "C:\TNSMaster\sqlnet.ora" -Force;
+Copy-Item -Path "<filepath>\TNS_ADMIN\tnsnames.ora" -Destination "C:\TNSMaster\tnsnames.ora" -Force;
+Copy-Item -Path "<filepath>\TNS_ADMIN\sqlnet.ora" -Destination "C:\TNSMaster\sqlnet.ora" -Force;
 Write-Output 'Copied the tnsnames and sqlnet.ora to C:\TNSMaster'
 
 Write-Output 'Setting Oracle environment registry keys'
-$Var='regedit /s "\\cirrus-share1.istc-inf.local\DBA\Scripts\OracleClient\Registry\64BITORAENV.reg"'
+$Var='regedit /s "<filepath>\OracleClient\Registry\64BITORAENV.reg"'
 $P = Start-Process -Verb RunAs cmd.exe -Args '/c', $var -PassThru -Wait
 if($p.ExitCode -notin "0" )
 {
     throw "Adding 64 bit entries to registry returned error code: $($p.ExitCode)"
 }
-$Var='regedit /s "\\cirrus-share1.istc-inf.local\DBA\Scripts\OracleClient\Registry\32BITORAENV.reg"'
+$Var='regedit /s "<filepath>\Registry\32BITORAENV.reg"'
 $P = Start-Process -Verb RunAs cmd.exe -Args '/c', $var -PassThru -Wait
 if($p.ExitCode -notin "0" )
 {
     throw "Adding 32 bit entries to registry returned error code: $($p.ExitCode)"
 }
-$Var='regedit /s "\\cirrus-share1.istc-inf.local\DBA\Scripts\OracleClient\Registry\ENVVARIABLE.reg"'
+$Var='regedit /s "<filepath>\Registry\ENVVARIABLE.reg"'
 $P = Start-Process -Verb RunAs cmd.exe -Args '/c', $var -PassThru -Wait
 if($p.ExitCode -notin "0" )
 {
