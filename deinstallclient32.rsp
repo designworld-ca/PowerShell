@@ -1,0 +1,18 @@
+# Copyright (c) 2005, 2009 Oracle Corporation.  All rights reserved.
+ORACLE_HOME=D:\Oracle\product\12.2.0\client_1\client32
+COMPS_TO_REMOVE=ntoledb,oramts,asp.net,odp.net
+ORACLE_HOME_VERSION=12.2.0.1.0
+ORACLE_BASE=D:\Oracle
+INVENTORY_LOCATION=C:\Program Files\Oracle\Inventory
+CRS_HOME=false
+HOME_TYPE=CLIENT
+silent=true
+WindowsRegistryCleanupList=\\cirrus-share1.istc-inf.local\DBA\Scripts\OracleClient\Uninstall\utl\registry_cleanup.lst
+MinimumSupportedVersion=11.2.0.1.0
+LOCAL_NODE=DBA-SB-2K12
+local=false
+ObaseCleanupPtrLoc=\\cirrus-share1.istc-inf.local\DBA\Scripts\OracleClient\Uninstall\utl\orabase_cleanup.lst
+ORACLE_HOME=D:\Oracle\product\12.2.0\client_1\client32
+LOGDIR=\\cirrus-share1.istc-inf.local\DBA\Scripts\OracleClient\Uninstall\32BitLogs
+OLD_ACTIVE_ORACLE_HOME=
+ORACLE_HOME_VERSION_VALID=true
