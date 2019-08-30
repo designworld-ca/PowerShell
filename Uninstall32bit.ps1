@@ -4,7 +4,7 @@ Start-Transcript -Path $Logfile -Append
 
 
 # The command to pass to cmd.exe /c
-$var = 'D:\Oracle\product\12.2.0\client_1\client32\deinstall\deinstall.bat -silent -paramFile "\\cirrus-share1.istc-inf.local\DBA\Scripts\OracleClient\Uninstall\32Bit\deinstallclient32.rsp"'
+$var = 'D:\Oracle\product\12.2.0\client_1\client32\deinstall\deinstall.bat -silent -paramFile "<filepath>\OracleClient\Uninstall\32Bit\deinstallclient32.rsp"'
 
 Write-Output 'Start the 32 bit uninstall asynchronously'
 # as the current user with elevation (administrative rights).
@@ -14,7 +14,7 @@ if($p.ExitCode -notin "0", "259" )
 {
     throw "32 bit uninstall process returned error code: $($p.ExitCode)"
 }
-Write-Output 'Finished the 32 bit uninstall, Logs at \\cirrus-share1.istc-inf.local\DBA\Scripts\OracleClient\Uninstall\32Bit\32BitLogs'
+Write-Output 'Finished the 32 bit uninstall, Logs at <filepath>\OracleClient\Uninstall\32Bit\32BitLogs'
 
 Write-Output 'Deleting the 32 bit client folder'
 
