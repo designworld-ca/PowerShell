@@ -10,7 +10,7 @@ if($lang.Name -notin "en-CA", "en-US" )
 }
 
 # The command to pass to cmd.exe /c
-$var = '<filepath>\win32_12201_client\client32\setup.exe -ignoreSysPrereqs -showProgress -silent -nowait -responseFile "\\cirrus-share1.istc-inf.local\DBA\Scripts\OracleClient\Software\win32_12201_client\client32\response\client32.rsp"'
+$var = '<filepath>\win32_12201_client\client32\setup.exe -ignoreSysPrereqs -showProgress -silent -nowait -responseFile "<filepath>\OracleClient\Software\win32_12201_client\client32\response\client32.rsp"'
 
 Write-Output 'Start the 32 bit process process asynchronously, in a new window'
 # as the current user with elevation (administrative rights).
