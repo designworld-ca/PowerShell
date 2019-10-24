@@ -1,0 +1,36 @@
+# FILE NAME: ExportCsv
+# PURPOSE: reads all items in a folder and writes them to a csv file
+# AUTHOR: Kevin LaRoche
+# CREATED: October 9, 2019
+# NOTES: assumes all items in pathToJsonFolder are .json files
+# french characters are assumed to be present in all files so UTF8 encoding is specified at all stages
+$outputFolder = "C:\Users\Public\Documents\export\"
+$logFileName = $outputFolder + "ExportCsv.log"
+$pathToJsonFolder = "C:\Users\Public\Documents\svc-collections\" 
+
+$outFormat = ".csv"
+Start-Transcript -Path  $logFileName
+
+foreach ($file in Get-ChildItem $pathToJsonFolder)
+{
+try
+{
+$trimmedFileName = $file.BaseName
+$inFileName = $file.Name
+$pathToJsonFile = $pathToJsonFolder + $inFileName
+$outFile = $outputFolder + $trimmedFileName + $outFormat
+$results = Get-Content -Path $pathToJsonFile -Encoding UTF8 | ConvertFrom-Json | Select -Expand itemarray |Select id, textEnglish, textFrench,textAbbreviationEnglish, textAbbreviationFrench
+Write-Host "Processed " $inFileName
+$results | Export-CSV -Path $outFile -NoTypeInformation -Encoding UTF8
+Write-Host "Exported " $outFile
+}
+catch
+{
+    write-host "Caught an exception with:" $trimmedFileName -ForegroundColor Red
+    write-host "Exception Type: $($_.Exception.GetType().FullName)" -ForegroundColor Red
+    write-host "Exception Message: $($_.Exception.Message)" -ForegroundColor Red
+}
+
+}
+
+Stop-Transcript
