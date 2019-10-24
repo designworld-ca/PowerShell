@@ -1,0 +1,475 @@
+{
+  "id": "string",
+  "systemUpdate": "2019-09-26T18:05:46.920Z",
+  "correlationId": "string",
+  "externalCorrelationId": "string",
+  "createAction": {
+    "actionId": "string",
+    "actionContextId": "string",
+    "actionBy": {
+      "displayName": "string",
+      "domain": "string",
+      "username": "string",
+      "email": "string"
+    },
+    "actionAtUtc": "2019-09-26T18:05:46.920Z"
+  },
+  "lastAction": {
+    "actionId": "string",
+    "actionContextId": "string",
+    "actionBy": {
+      "displayName": "string",
+      "domain": "string",
+      "username": "string",
+      "email": "string"
+    },
+    "actionAtUtc": "2019-09-26T18:05:46.920Z"
+  },
+  "lastSubmitToAction": {
+    "submitTo": {
+      "displayName": "string",
+      "domain": "string",
+      "username": "string",
+      "email": "string"
+    },
+    "actionAtUtc": "2019-09-26T18:05:46.920Z"
+  },
+  "classificationLevelId": "string",
+  "status": {
+    "additionalProp1": "string",
+    "additionalProp2": "string",
+    "additionalProp3": "string"
+  },
+  "isArchived": true,
+  "attentionRequiredUsername": "string",
+  "partA": {
+    "editUser": {
+      "displayName": "string",
+      "domain": "string",
+      "username": "string",
+      "email": "string"
+    },
+    "nextUser": {
+      "displayName": "string",
+      "domain": "string",
+      "username": "string",
+      "email": "string"
+    },
+    "modifyAction": {
+      "actionId": "string",
+      "actionContextId": "string",
+      "actionBy": {
+        "displayName": "string",
+        "domain": "string",
+        "username": "string",
+        "email": "string"
+      },
+      "actionAtUtc": "2019-09-26T18:05:46.920Z"
+    },
+    "submitAction": {
+      "actionId": "string",
+      "actionContextId": "string",
+      "actionBy": {
+        "displayName": "string",
+        "domain": "string",
+        "username": "string",
+        "email": "string"
+      },
+      "actionAtUtc": "2019-09-26T18:05:46.920Z"
+    },
+    "archiveAction": {
+      "actionId": "string",
+      "actionContextId": "string",
+      "actionBy": {
+        "displayName": "string",
+        "domain": "string",
+        "username": "string",
+        "email": "string"
+      },
+      "actionAtUtc": "2019-09-26T18:05:46.920Z"
+    },
+    "lastAction": {
+      "actionId": "string",
+      "actionContextId": "string",
+      "actionBy": {
+        "displayName": "string",
+        "domain": "string",
+        "username": "string",
+        "email": "string"
+      },
+      "actionAtUtc": "2019-09-26T18:05:46.920Z"
+    },
+    "submitNotification": "string",
+    "l1Id": "string",
+    "l2Id": "string",
+    "globalTopicArea": "string",
+    "l1TopicArea": "string",
+    "activityList": [
+      "string"
+    ],
+    "keywordList": [
+      "string"
+    ],
+    "dotmlpfi": [
+      "string"
+    ],
+    "riskSeverity": "string",
+    "riskFrequency": "string",
+    "proceedLfr": true,
+    "complexBackground": {
+      "value": "string",
+      "valueHtml": "string"
+    },
+    "complexFindingStatement": {
+      "value": "string",
+      "valueHtml": "string"
+    },
+    "complexRecommendations": {
+      "value": "string",
+      "valueHtml": "string"
+    },
+    "complexArchivedRationale": {
+      "value": "string",
+      "valueHtml": "string"
+    }
+  },
+  "partB": {
+    "editUser": {
+      "displayName": "string",
+      "domain": "string",
+      "username": "string",
+      "email": "string"
+    },
+    "nextUser": {
+      "displayName": "string",
+      "domain": "string",
+      "username": "string",
+      "email": "string"
+    },
+    "modifyAction": {
+      "actionId": "string",
+      "actionContextId": "string",
+      "actionBy": {
+        "displayName": "string",
+        "domain": "string",
+        "username": "string",
+        "email": "string"
+      },
+      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+    },
+    "submitAction": {
+      "actionId": "string",
+      "actionContextId": "string",
+      "actionBy": {
+        "displayName": "string",
+        "domain": "string",
+        "username": "string",
+        "email": "string"
+      },
+      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+    },
+    "archiveAction": {
+      "actionId": "string",
+      "actionContextId": "string",
+      "actionBy": {
+        "displayName": "string",
+        "domain": "string",
+        "username": "string",
+        "email": "string"
+      },
+      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+    },
+    "lastAction": {
+      "actionId": "string",
+      "actionContextId": "string",
+      "actionBy": {
+        "displayName": "string",
+        "domain": "string",
+        "username": "string",
+        "email": "string"
+      },
+      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+    },
+    "submitNotification": "string",
+    "proceedLfr": true,
+    "complexComments": {
+      "value": "string",
+      "valueHtml": "string"
+    },
+    "complexRecommendations": {
+      "value": "string",
+      "valueHtml": "string"
+    },
+    "complexArchivedRationale": {
+      "value": "string",
+      "valueHtml": "string"
+    }
+  },
+  "partC": {
+    "editUser": {
+      "displayName": "string",
+      "domain": "string",
+      "username": "string",
+      "email": "string"
+    },
+    "nextUser": {
+      "displayName": "string",
+      "domain": "string",
+      "username": "string",
+      "email": "string"
+    },
+    "nextChangeAuthority": {
+      "displayName": "string",
+      "domain": "string",
+      "username": "string",
+      "email": "string"
+    },
+    "modifyAction": {
+      "actionId": "string",
+      "actionContextId": "string",
+      "actionBy": {
+        "displayName": "string",
+        "domain": "string",
+        "username": "string",
+        "email": "string"
+      },
+      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+    },
+    "submitAction": {
+      "actionId": "string",
+      "actionContextId": "string",
+      "actionBy": {
+        "displayName": "string",
+        "domain": "string",
+        "username": "string",
+        "email": "string"
+      },
+      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+    },
+    "archiveAction": {
+      "actionId": "string",
+      "actionContextId": "string",
+      "actionBy": {
+        "displayName": "string",
+        "domain": "string",
+        "username": "string",
+        "email": "string"
+      },
+      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+    },
+    "lastAction": {
+      "actionId": "string",
+      "actionContextId": "string",
+      "actionBy": {
+        "displayName": "string",
+        "domain": "string",
+        "username": "string",
+        "email": "string"
+      },
+      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+    },
+    "submitNotification": "string",
+    "proceedLfr": true,
+    "complexAnalysis": {
+      "value": "string",
+      "valueHtml": "string"
+    },
+    "complexActionTaken": {
+      "value": "string",
+      "valueHtml": "string"
+    },
+    "complexChangeLevel": {
+      "value": "string",
+      "valueHtml": "string"
+    },
+    "complexArchivedRationale": {
+      "value": "string",
+      "valueHtml": "string"
+    }
+  },
+  "partD": {
+    "editUser": {
+      "displayName": "string",
+      "domain": "string",
+      "username": "string",
+      "email": "string"
+    },
+    "nextUser": {
+      "displayName": "string",
+      "domain": "string",
+      "username": "string",
+      "email": "string"
+    },
+    "changeAuthority": {
+      "displayName": "string",
+      "domain": "string",
+      "username": "string",
+      "email": "string"
+    },
+    "modifyAction": {
+      "actionId": "string",
+      "actionContextId": "string",
+      "actionBy": {
+        "displayName": "string",
+        "domain": "string",
+        "username": "string",
+        "email": "string"
+      },
+      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+    },
+    "submitAction": {
+      "actionId": "string",
+      "actionContextId": "string",
+      "actionBy": {
+        "displayName": "string",
+        "domain": "string",
+        "username": "string",
+        "email": "string"
+      },
+      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+    },
+    "archiveAction": {
+      "actionId": "string",
+      "actionContextId": "string",
+      "actionBy": {
+        "displayName": "string",
+        "domain": "string",
+        "username": "string",
+        "email": "string"
+      },
+      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+    },
+    "lastAction": {
+      "actionId": "string",
+      "actionContextId": "string",
+      "actionBy": {
+        "displayName": "string",
+        "domain": "string",
+        "username": "string",
+        "email": "string"
+      },
+      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+    },
+    "proceedLfr": true,
+    "complexProceedRationale": {
+      "value": "string",
+      "valueHtml": "string"
+    },
+    "complexCourseOfAction": {
+      "value": "string",
+      "valueHtml": "string"
+    },
+    "complexValidationPlan": {
+      "value": "string",
+      "valueHtml": "string"
+    },
+    "complexArchivedRationale": {
+      "value": "string",
+      "valueHtml": "string"
+    }
+  },
+  "partE": {
+    "editUser": {
+      "displayName": "string",
+      "domain": "string",
+      "username": "string",
+      "email": "string"
+    },
+    "modifyAction": {
+      "actionId": "string",
+      "actionContextId": "string",
+      "actionBy": {
+        "displayName": "string",
+        "domain": "string",
+        "username": "string",
+        "email": "string"
+      },
+      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+    },
+    "submitAction": {
+      "actionId": "string",
+      "actionContextId": "string",
+      "actionBy": {
+        "displayName": "string",
+        "domain": "string",
+        "username": "string",
+        "email": "string"
+      },
+      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+    },
+    "archiveAction": {
+      "actionId": "string",
+      "actionContextId": "string",
+      "actionBy": {
+        "displayName": "string",
+        "domain": "string",
+        "username": "string",
+        "email": "string"
+      },
+      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+    },
+    "lastAction": {
+      "actionId": "string",
+      "actionContextId": "string",
+      "actionBy": {
+        "displayName": "string",
+        "domain": "string",
+        "username": "string",
+        "email": "string"
+      },
+      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+    },
+    "proceedLfr": true,
+    "complexLessonsLearned": {
+      "value": "string",
+      "valueHtml": "string"
+    },
+    "complexArchivedRationale": {
+      "value": "string",
+      "valueHtml": "string"
+    }
+  },
+  "lfrNumber": "string",
+  "title": "string",
+  "attachmentList": [
+    {
+      "id": "string",
+      "filename": "string",
+      "title": "string",
+      "submitted": true,
+      "fileId": "string"
+    }
+  ],
+  "linkedObservationList": [
+    {
+      "id": "string",
+      "observationNumber": "string",
+      "title": "string",
+      "Submitted": true
+    }
+  ],
+  "assignmentEntryList": [
+    {
+      "assignmentAction": {
+        "actionId": "string",
+        "actionContextId": "string",
+        "actionBy": {
+          "displayName": "string",
+          "domain": "string",
+          "username": "string",
+          "email": "string"
+        },
+        "actionAtUtc": "2019-09-26T18:05:46.921Z"
+      },
+      "assignedTo": {
+        "displayName": "string",
+        "domain": "string",
+        "username": "string",
+        "email": "string"
+      },
+      "complexRationale": {
+        "value": "string",
+        "valueHtml": "string"
+      }
+    }
+ 
