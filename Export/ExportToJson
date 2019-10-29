@@ -1,6 +1,6 @@
 {
   "id": "string",
-  "systemUpdate": "2019-09-26T18:05:46.920Z",
+  "systemUpdate": "2019-10-29T17:55:33.494Z",
   "correlationId": "string",
   "externalCorrelationId": "string",
   "createAction": {
@@ -12,7 +12,7 @@
       "username": "string",
       "email": "string"
     },
-    "actionAtUtc": "2019-09-26T18:05:46.920Z"
+    "actionAtUtc": "2019-10-29T17:55:33.494Z"
   },
   "lastAction": {
     "actionId": "string",
@@ -23,7 +23,7 @@
       "username": "string",
       "email": "string"
     },
-    "actionAtUtc": "2019-09-26T18:05:46.920Z"
+    "actionAtUtc": "2019-10-29T17:55:33.494Z"
   },
   "lastSubmitToAction": {
     "submitTo": {
@@ -32,7 +32,7 @@
       "username": "string",
       "email": "string"
     },
-    "actionAtUtc": "2019-09-26T18:05:46.920Z"
+    "actionAtUtc": "2019-10-29T17:55:33.494Z"
   },
   "classificationLevelId": "string",
   "status": {
@@ -64,7 +64,7 @@
         "username": "string",
         "email": "string"
       },
-      "actionAtUtc": "2019-09-26T18:05:46.920Z"
+      "actionAtUtc": "2019-10-29T17:55:33.494Z"
     },
     "submitAction": {
       "actionId": "string",
@@ -75,7 +75,7 @@
         "username": "string",
         "email": "string"
       },
-      "actionAtUtc": "2019-09-26T18:05:46.920Z"
+      "actionAtUtc": "2019-10-29T17:55:33.494Z"
     },
     "archiveAction": {
       "actionId": "string",
@@ -86,7 +86,7 @@
         "username": "string",
         "email": "string"
       },
-      "actionAtUtc": "2019-09-26T18:05:46.920Z"
+      "actionAtUtc": "2019-10-29T17:55:33.494Z"
     },
     "lastAction": {
       "actionId": "string",
@@ -97,7 +97,7 @@
         "username": "string",
         "email": "string"
       },
-      "actionAtUtc": "2019-09-26T18:05:46.920Z"
+      "actionAtUtc": "2019-10-29T17:55:33.494Z"
     },
     "submitNotification": "string",
     "l1Id": "string",
@@ -155,7 +155,7 @@
         "username": "string",
         "email": "string"
       },
-      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+      "actionAtUtc": "2019-10-29T17:55:33.494Z"
     },
     "submitAction": {
       "actionId": "string",
@@ -166,7 +166,7 @@
         "username": "string",
         "email": "string"
       },
-      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+      "actionAtUtc": "2019-10-29T17:55:33.494Z"
     },
     "archiveAction": {
       "actionId": "string",
@@ -177,7 +177,7 @@
         "username": "string",
         "email": "string"
       },
-      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+      "actionAtUtc": "2019-10-29T17:55:33.494Z"
     },
     "lastAction": {
       "actionId": "string",
@@ -188,7 +188,7 @@
         "username": "string",
         "email": "string"
       },
-      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+      "actionAtUtc": "2019-10-29T17:55:33.495Z"
     },
     "submitNotification": "string",
     "proceedLfr": true,
@@ -233,7 +233,7 @@
         "username": "string",
         "email": "string"
       },
-      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+      "actionAtUtc": "2019-10-29T17:55:33.495Z"
     },
     "submitAction": {
       "actionId": "string",
@@ -244,7 +244,7 @@
         "username": "string",
         "email": "string"
       },
-      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+      "actionAtUtc": "2019-10-29T17:55:33.495Z"
     },
     "archiveAction": {
       "actionId": "string",
@@ -255,7 +255,7 @@
         "username": "string",
         "email": "string"
       },
-      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+      "actionAtUtc": "2019-10-29T17:55:33.495Z"
     },
     "lastAction": {
       "actionId": "string",
@@ -266,7 +266,7 @@
         "username": "string",
         "email": "string"
       },
-      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+      "actionAtUtc": "2019-10-29T17:55:33.495Z"
     },
     "submitNotification": "string",
     "proceedLfr": true,
@@ -315,7 +315,7 @@
         "username": "string",
         "email": "string"
       },
-      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+      "actionAtUtc": "2019-10-29T17:55:33.495Z"
     },
     "submitAction": {
       "actionId": "string",
@@ -326,7 +326,7 @@
         "username": "string",
         "email": "string"
       },
-      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+      "actionAtUtc": "2019-10-29T17:55:33.495Z"
     },
     "archiveAction": {
       "actionId": "string",
@@ -337,7 +337,7 @@
         "username": "string",
         "email": "string"
       },
-      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+      "actionAtUtc": "2019-10-29T17:55:33.495Z"
     },
     "lastAction": {
       "actionId": "string",
@@ -348,7 +348,7 @@
         "username": "string",
         "email": "string"
       },
-      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+      "actionAtUtc": "2019-10-29T17:55:33.495Z"
     },
     "proceedLfr": true,
     "complexProceedRationale": {
@@ -384,7 +384,7 @@
         "username": "string",
         "email": "string"
       },
-      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+      "actionAtUtc": "2019-10-29T17:55:33.495Z"
     },
     "submitAction": {
       "actionId": "string",
@@ -395,7 +395,7 @@
         "username": "string",
         "email": "string"
       },
-      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+      "actionAtUtc": "2019-10-29T17:55:33.495Z"
     },
     "archiveAction": {
       "actionId": "string",
@@ -406,7 +406,7 @@
         "username": "string",
         "email": "string"
       },
-      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+      "actionAtUtc": "2019-10-29T17:55:33.495Z"
     },
     "lastAction": {
       "actionId": "string",
@@ -417,7 +417,7 @@
         "username": "string",
         "email": "string"
       },
-      "actionAtUtc": "2019-09-26T18:05:46.921Z"
+      "actionAtUtc": "2019-10-29T17:55:33.495Z"
     },
     "proceedLfr": true,
     "complexLessonsLearned": {
@@ -459,7 +459,7 @@
           "username": "string",
           "email": "string"
         },
-        "actionAtUtc": "2019-09-26T18:05:46.921Z"
+        "actionAtUtc": "2019-10-29T17:55:33.495Z"
       },
       "assignedTo": {
         "displayName": "string",
@@ -472,4 +472,30 @@
         "valueHtml": "string"
       }
     }
- 
+  ],
+  "historyEntryList": [
+    {
+      "historyAction": {
+        "actionId": "string",
+        "actionContextId": "string",
+        "actionBy": {
+          "displayName": "string",
+          "domain": "string",
+          "username": "string",
+          "email": "string"
+        },
+        "actionAtUtc": "2019-10-29T17:55:33.495Z"
+      },
+      "assignedTo": {
+        "displayName": "string",
+        "domain": "string",
+        "username": "string",
+        "email": "string"
+      },
+      "complexDetails": {
+        "value": "string",
+        "valueHtml": "string"
+      }
+    }
+  ]
+}
