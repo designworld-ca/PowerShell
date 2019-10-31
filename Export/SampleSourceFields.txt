@@ -1,0 +1,52 @@
+Name                           Value                                                                                                                                       
+----                           -----                                                                                                                                       
+Observers_x0020_Org            string (organization)                                                                                                                                    
+_ModerationStatus              0                                                                                                                                           
+FSObjType                      0                                                                                                                                           
+ScopeId                        {F3321211-3CB0-4704-83CA-AC3E001EF6E8}                                                                                                      
+Author                         email, lookup Id, typeid, lookup value                                                                                                  
+FileRef                        /sites/DGIMPD/LL/Lists/Obs/1_.000                                                                                                           
+Order                          100                                                                                                                                         
+Created                        2018-05-25 12:57:37 PM                                                                                                                      
+FolderChildCount               0                                                                                                                                           
+Created_x0020_Date             2018-05-25T12:57:37Z                                                                                                                        
+Project_x0020_Name             string                                                                                                                 
+Restricted                                                                                                                                                                 
+ContentTypeId                  0x01006437B9FD1B03E940B83F2FEFEF09F8E6                                                                                                      
+_Level                         1                                                                                                                                           
+ContentVersion                 0                                                                                                                                           
+Editor                         email, lookup Id, typeid, lookup value                                                                                                  
+AppAuthor                                                                                                                                                                  
+_CopySource                                                                                                                                                                
+Recommendations                string
+Observations                   string
+_UIVersionString               1.0                                                                                                                                         
+Statement_x0020_of_x0020_Co... string
+WorkflowInstanceID                                                                                                                                                         
+Observer                       email, lookup Id, typeid, lookup value                                                                                                  
+MetaInfo                                                                                                                                                                   
+_HasCopyDestinations                                                                                                                                                       
+Attachments                    False                                                                                                                                       
+SyncClientId                   lookup Id, typeid, lookup value                                                                                                  
+FileLeafRef                    1_.000                                                                                                                                      
+Modified                       2018-08-22 3:33:44 PM                                                                                                                       
+_UIVersion                     512                                                                                                                                         
+Categories                     BP                                                                                                                                          
+_ModerationComments                                                                                                                                                        
+File_x0020_Type                                                                                                                                                            
+ID                             1                                                                                                                                           
+owshiddenversion               7                                                                                                                                           
+Project_x0020_Status           Closed                                                                                                                                      
+AppEditor                                                                                                                                                                  
+InstanceID                                                                                                                                                                 
+UniqueId                       0ff2b9d0-7d41-4dbd-9065-ea49a2c1e020                                                                                                        
+SortBehavior                   lookup Id, typeid, lookup value                                                                                                
+GUID                           39da8324-8cd7-43f9-8d7a-0dbab9660802                                                                                                        
+ProgId                                                                                                                                                                     
+Last_x0020_Modified            2018-05-25T12:57:37Z                                                                                                                        
+FileDirRef                     /sites/DGIMPD/LL/Lists/Obs                                                                                                                  
+WorkflowVersion                1                                                                                                                                           
+Title                          string                                                                                      
+_IsCurrentVersion              True                                                                                                                                        
+PAD_x0020_Phase                {Definition Phase}                                                                                                                          
+ItemChildCount                 0     
