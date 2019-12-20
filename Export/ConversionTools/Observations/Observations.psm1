@@ -237,6 +237,7 @@ function script:Export-CsvToJson{
     #if the json file exists rename it to .old
     if (Test-Path -Path $outFile) 
     {
+      Write-Verbose 'Renaming an existing json file to <xxx>.json.old'
       $renamedFile = $outFile + '.old'
       Rename-Item -Path $outFile -NewName $renamedFile
     }
@@ -273,7 +274,7 @@ function script:Export-SPListFieldNamesToCsv{
       entered the csv file is written to the users documents folder
 
       .OUTPUTS
-      A csv file with the names of the fields in the list
+      A csv file with the names of the fields in the list with naming format <SPLLCT Short Name>Mapping.csv
 
       .EXAMPLE
        Export-SPListFieldNamesToCsv -spSiteUrl $spBaseSite -spListName "SPLLCT" -outFolderPath $($in + "\")
@@ -320,13 +321,13 @@ function script:Export-SPListFieldNamesToCsv{
 
   if ($PSCmdlet.MyInvocation.BoundParameters['Verbose'].IsPresent)
   {
-    'Log file started and located in same folder as this script'
+    Write-Verbose 'Log file started and located in same folder as this script'
     $Logfile = $outFolderPath +('{0}.log' -f $SPLLCTName)
     Start-Transcript -Path $Logfile 
   }
   
 
-  $outputFile   = $outFolderPath+('{0}.csv' -f $SPLLCTName)
+  $outputFile   = $outFolderPath+('{0}{1}.csv' -f $SPLLCTName, 'Mapping')
   
   if (-not (Get-Module -Name SharepointSDK)) {
     Import-Module -Name N:\0_DGIMPD_DGRPGI\0_DPDCC\C2MP\DLLS\ConversionTools\sharepointsdk\sharepointsdk.psm1
@@ -370,7 +371,7 @@ function Export-AllSPListFieldsToCsv{
       Exports one csv file per SPLLCT of the field names and descriptions of every SPLLCT listed in the SPLLCTList.json Template folder 
 
       .DESCRIPTION
-      a longer description
+      Exports the name, internal name and description of the fields in each Observation
 
       .PARAMETER $yourCredentialName
       Username and password created with Set-Credential
@@ -598,7 +599,7 @@ function Export-SPListToCsv{
 
   if ($PSCmdlet.MyInvocation.BoundParameters['Verbose'].IsPresent)
   {
-    'Log file started and located in same folder as this script'
+    Write-Verbose 'Log file started and located in same folder as this script'
     $Logfile = $outFolderPath +('{0}.log' -f $SPLLCTName)
     Start-Transcript -Path $Logfile 
   }
@@ -681,22 +682,23 @@ function Export-SPListToCsv{
       complexArchivedRationale = $cleanedContext
     }
 
-    #if the csv file exists rename it to .old
+    #if the csv file exists rename it to .old and delete the old one
     if (Test-Path -Path ('{0}\{1}.csv' -f $outFolderPath, $SPLLCTName)) 
     {
-      'csv file exists, renaming'
+      Write-Verbose 'csv file exists, renaming'
       $renamedFile = ('{0}\{1}.csv{2}' -f $outFolderPath, $SPLLCTName, '.old')
-      Rename-Item -Path ('{0}\{1}.csv' -f $outFolderPath, $SPLLCTName) -NewName $renamedFile
+      Move-Item -Path ('{0}\{1}.csv' -f $outFolderPath, $SPLLCTName) -Destination $renamedFile -Force
       }
       
       #send the powershell object to a csv file for review
-      $cleanedList | Select-Object -Property id, correlationId, systemUpdate,title, complexObservation, complexRecommendation, complexArchivedRationale  | Export-Csv `
-      -Path ('{0}\{1}.csv' -f $outFolderPath, $SPLLCTName) `
-      -Force `
-      -Encoding UTF8 `
-      -NoTypeInformation
+      #seems to interfere with json export
+     # $cleanedList | Select-Object -Property id, correlationId, systemUpdate,title, complexObservation, complexRecommendation, complexArchivedRationale  | Export-Csv `
+     #-Path ('{0}\{1}.csv' -f $outFolderPath, $SPLLCTName) `
+     # -Force `
+     # -Encoding UTF8 `
+     # -NoTypeInformation
 
-      'send the powershell object to a json file' 
+      #'send the powershell object to a json file' 
       convertTo-Json -InputObject $cleanedList -Depth 99 | Set-Content  `
       -Path ('{0}\{1}.json' -f $outFolderPath, $SPLLCTName) `
       -Encoding UTF8 -Force 
@@ -713,6 +715,128 @@ function Export-SPListToCsv{
 
    
 
+} #end function
+
+function script:Import-JsonToDLLS{
+  <#
+      .SYNOPSIS
+      Accepts a path to a folder where json files are located. Reads these files
+      and writes out the content to a REST API
+
+      .DESCRIPTION
+      Converts each json file into a Rest API call with UTF8 encoding
+
+      .PARAMETER $inFolderPath
+      The path to the folder where the json files are located
+      .PARAMETER $outUri
+      The uri of the web site API
+
+      .INPUTS
+      A string representing the folder path
+
+      .OUTPUTS
+      One csv file json file located in the inFolderPath parameter
+
+      .EXAMPLE
+
+      $in      = 'N:\0_DGIMPD_DGRPGI\0_DPDCC\C2MP\DLLS\ExportedData'
+      $outUri  = 'http://eis-ls2-av07130:7016/api/v1/Observations'
+       ./Import-JsonToDLLS  $in  $outUri
+
+      .LINK
+      Get-Content
+      Invoke-RestMethod
+
+      .NOTES
+      Folder paths have a \ added at the end to construct the file names
+
+  #>
+  param (
+    [Parameter(Mandatory,
+    HelpMessage='Enter the path to the folder where the json files are located')] 
+    [ValidateScript({Test-Path -Path $_})]
+    [string]$inFolderPath,
+    [Parameter(Mandatory,
+    HelpMessage='Enter the uri to the API where the json files will be written')] 
+    [string]$outUri)
+
+  
+
+                         function Get-JsonFiles
+                         {
+                           <#
+                             .SYNOPSIS
+                             Filters for file types ending in .json
+
+                             .DESCRIPTION
+                             Acts on all files within a folder.
+
+                             .PARAMETER InputObject
+                             A directory.
+
+                             .EXAMPLE
+                              $jsonList = $Dir | Get-JsonFiles
+
+                             .INPUTS
+                             A directory.
+
+                             .OUTPUTS
+                             An array of file items of type json
+                           #>
+
+
+                           param
+                           (
+                             [Parameter(Mandatory, ValueFromPipeline, HelpMessage='Filtering for json files')]
+                             [PSObject]$InputObject
+                           )
+                           process
+                           {
+                             if ($InputObject.extension -eq '.json')
+                             {
+                               $InputObject
+                             }
+                           }
+                         }
+
+    $headers = ""
+    $headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
+    $headers.Add("Content-Type","application/json")
+    $headers.Add("Accept","application/json")
+    <#no credentials required currently but they would be added here
+    $restUserName = "xxxxx"
+    $restUserPass = "xxxxx"
+    $headers.Add("X-Auth-user  = $restUserName; "X-Auth-Password" = $restUserPass)
+    or another example
+    $username = Read-Host “Enter username: “
+    $password = Read-Host “Enter password: “
+    $userpass  = $username + “:” + $password
+    $bytes= [System.Text.Encoding]::UTF8.GetBytes($userpass)
+    $encodedlogin=[Convert]::ToBase64String($bytes)
+    $authheader = "Basic " + $encodedlogin
+    $headers.Add("Authorization",$authheader)
+    #>
+
+  $Dir = get-childitem -Path $inFolderPath
+
+  $jsonList = $Dir | Get-JsonFiles
+
+  ForEach($jsonFile in $jsonList)
+  {
+    $inFile  = $inFolderPath + '\' + $jsonFile.Name
+    $trimmedFileName = $jsonFile.BaseName
+    $json = Get-Content $inFile -Raw -Encoding UTF8
+
+    try{
+
+        $response = ""
+        $response = Invoke-RestMethod -Uri $outUri -Headers $headers -Method Post -Body $json -ContentType "application/json" 
+       }
+    catch {
+        Write-Error $response.Detail
+       }
+       Write-Host $trimmedFileName " processed with details=" $response
+  } #end for each
 } #end function
 
 function Get-UserDocumentsPath{
