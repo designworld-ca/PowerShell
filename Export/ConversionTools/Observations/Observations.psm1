@@ -137,9 +137,9 @@ function script:Export-JsonToCsv{
     $trimmedFileName = $jsonFile.BaseName
     $outFile = $outFolderPath + '\' + $trimmedFileName + '.csv'
 
-    $results = Get-Content -Path $inFile -Encoding $EncodeFormat | ConvertFrom-Json 
+    $results = Get-Content -Path $inFile -Encoding $encodeFormat | ConvertFrom-Json 
     'Processed ' +  $inFile
-    $results | Export-CSV -Path $outFile -NoTypeInformation -Encoding $EncodeFormat
+    $results | Export-CSV -Path $outFile -NoTypeInformation -Encoding $encodeFormat
   }
 } #end function
 
@@ -243,9 +243,9 @@ function script:Export-CsvToJson{
     }
     
 
-    import-csv -Path $inFile -Encoding $EncodeFormat | 
+    import-csv -Path $inFile -Encoding $encodeFormat | 
     ConvertTo-Json -Depth 99 | 
-    Add-Content -Path $outfile -Encoding UTF8
+    Add-Content -Path $outfile -Encoding $encodeFormat
     'Wrote {0}' -f $outfile
   }
 
@@ -356,7 +356,7 @@ function script:Export-SPListFieldNamesToCsv{
 
   $listFields = Get-SPListFields -SiteUrl $spSiteUrl -Credential $cred -IsSharePointOnlineSite $false -ListName $spListName
   $listFields
-  write-Output -InputObject $listFields | Select-Object  -Property Title, InternalName, Description | Export-Csv -Path $outputFile -Encoding UTF8 -NoTypeInformation
+  write-Output -InputObject $listFields | Select-Object  -Property Title, InternalName, Description | Export-Csv -Path $outputFile -Encoding $encodeFormat -NoTypeInformation
 
     if ($PSCmdlet.MyInvocation.BoundParameters['Verbose'].IsPresent)
     {
@@ -502,15 +502,15 @@ function Export-SpListByShortName{
     write-output -InputObject 'short name is ', $thisSite.shortName
     write-output -InputObject 'url is ', $thisSite.baseUrl
     write-output -InputObject 'List name is ', $thisSite.observationListName
-    Export-SpListToCsv -spSiteUrl $thisSite.baseUrl -spListName $thisSite.observationListName -SPLLCTName $thisSite.shortName -outFolderPath $userDocumentsPath -credentialName $thisCredentialName
+    Export-SpListToJson -spSiteUrl $thisSite.baseUrl -spListName $thisSite.observationListName -SPLLCTName $thisSite.shortName -outFolderPath $userDocumentsPath -credentialName $thisCredentialName
     
 } #end function
 
 
-function Export-SPListToCsv{
+function Export-SPListToJson{
   <#
       .SYNOPSIS
-      Exports the contents of a Sharepoint List to CSV 
+      Exports the contents of a Sharepoint List to json 
 
       .DESCRIPTION
       Uses Templates/SPLLCTList.json  to get the details of the List (URL, name, short form name)
@@ -531,7 +531,7 @@ function Export-SPListToCsv{
       A string representing the path to the Sharepoint List
 
       .OUTPUTS
-      A csv file to a folder, usually your documents folder
+      A json file to a folder, usually your documents folder
 
       .EXAMPLE
       .\Export-SPList $siteUrl $listName $outputPath $cred
@@ -539,7 +539,8 @@ function Export-SPListToCsv{
       .LINK
       https://www.powershellgallery.com/packages/SharePointSDK/2.1.6
       https://html-agility-pack.net/
-      Export-Csv
+      Get-SPListItem
+      ConvertTo-Json
 
       .NOTES
       All output must be encoded in UTF8 to avoid character set conversion of french characters
@@ -556,18 +557,18 @@ function Export-SPListToCsv{
     HelpMessage='Enter the short form name of the SharePoint site from the template')] 
     [string]$SPLLCTName,
     [Parameter(Mandatory,
-    HelpMessage='Enter the path to the folder where the csv files will be written')] 
+    HelpMessage='Enter the path to the folder where the json files will be written')] 
     [string]$outFolderPath,
     [string]$credentialName)
 
   #Add a library that can strip out the html code
   Add-Type -AssemblyName HtmlAgilityPack
-  $dateFormat       = 'yyyy-MM-ddTHH:mm:ss:fff'
+  $dateFormat       = 'yyyy-MM-ddTHH:mm:ss.fffZ'
 
-  'This script exports the contents of a Sharepoint List to CSV'
+  'This script exports the contents of a Sharepoint List to Json files'
   $verbose =  $PSCmdlet.MyInvocation.BoundParameters['Verbose'].IsPresent
       if ($verbose)
-      {
+     {
         'Log file started and located in same folder as this script'
         $Logfile = $MyInvocation.MyCommand.Path -replace '\.ps1$', '.log'
         Start-Transcript -Path $Logfile
@@ -604,8 +605,6 @@ function Export-SPListToCsv{
     Start-Transcript -Path $Logfile 
   }
   
-
-  $outputFile   = $outFolderPath+('{0}{1}.csv' -f $SPLLCTName, '_Observations')
   
 
   if (($credentialName -eq $Null) -or ($credentialName -eq ''))
@@ -620,100 +619,218 @@ function Export-SPListToCsv{
     throw 'This credential is not valid. Enter the name of the credential to use not your username.'
   
   }
-
+###################start of json creation For DGIMPD only###############################
+#create some place holders for html and api tags
+$textOpen                 = "[{\""insert\"":\`""
+$textOpenPlaceHolder      =  " txtOPlHolder "
+$textClose                = "\\n\`"}]"
+$textClosePlaceHolder     = " txtCPlHolder "
+$textHtmlOpen             = "<p>"
+$textHtmlOpenPlaceHolder  = " txtHtOPlHolder "
+$textHtmlClose            = "<br/></p>"
+$textHtmlClosePlaceHolder = " txtHtCPlHolder "
   
-#Create a collection and fill it with the Observations
+  #Create a collection and fill it with the Observations
   $SPListItemCollection = Get-SPListItem -SiteUrl $spSiteUrl -ListName $spListName -Credential $cred -IsSPO $false 
 
-  #does this fail on null entries?
-  $cleanedList = foreach($ListItem in $SPListItemCollection  )
+  #iterate through the collection creating a json object for each observation
+  foreach($ListItem in $SPListItemCollection )
   {
-   
-    #1 create nested entries in actionBy Object
+    #set up some fields we need later
+    $username  = $ListItem.Editor.Email.Substring(0, $ListItem.Editor.Email.lastIndexOf('@'))
+    $TextInfo  = (Get-Culture).TextInfo
+    $fileTitle = $TextInfo.ToTitleCase($ListItem.Title) -replace '[^a-zA-Z]', ''
+
+    #1.1 create nested entries in actionBy Object
     $actionBy = @()
     $actionBy += [PSCustomObject]@{
       displayName = $ListItem.Editor.LookupValue
-
-      domain = $ListItem.Observers_x0020_Org
-
-      username = $ListItem.Author.LookupId
-      email = $ListItem.Editor.Email
-
+      domain   = "FORCES"
+      username = $username
+      email    = $ListItem.Editor.Email
     } 
 
-    #2 nest this in the createAction object
+    #1.2 nest this in the createAction object
     $createAction = @()
     $createAction += [PSCustomObject]@{
-      actionId='1'
-
-      actionContextId='1'
-
+      actionId       ="Created"
+      actionContextId ="A"
+      actionBy        = $actionBy
+      actionAtUtc     = (Get-Date -Date $ListItem.Modified -Format $dateFormat) 
+    }
+    #1.3 create last action object
+    $lastAction = @()
+    $lastAction += [PSCustomObject]@{
+      actionId="Submitted"
+      actionContextId="A"
       actionBy = $actionBy
-      actionAtUtc = (Get-Date -Date $ListItem.Modified -Format $dateFormat) 
-
+      actionAtUtc = (Get-Date -Date $ListItem.Modified -Format $dateFormat)
     }
-
-    #3 clean up text with embedded html
-    $doc = New-Object -TypeName HtmlAgilityPack.HtmlDocument
-    $doc.LoadHtml($ListItem.Recommendations)
-    $cleanedRecommendation = $doc.DocumentNode.InnerText
-    $doc.LoadHtml($ListItem.Observations)
-    $cleanedObservation = $doc.DocumentNode.InnerText
-    $doc.LoadHtml($ListItem.Statement_x0020_of_x0020_Context)
-    $cleanedContext = $doc.DocumentNode.InnerText 
-
-
-    #4 create the parent object with all the properties
-    [PSCustomObject]@{
-      id = $ListItem.ID.ToString()
- 
-      systemUpdate  = Get-Date -Date $ListItem.Created -Format $dateFormat
- 
-      correlationId = $ListItem.GUID
- 
-      externalCorrelationId = $ListItem.UniqueId
-      createAction = $createAction
-
-      title = $ListItem.Title
-
-      complexRecommendation = $cleanedRecommendation
-
-      complexObservation = $cleanedObservation
-      complexArchivedRationale = $cleanedContext
+    #1.4 create  status object
+    $status = @()
+    $status += [PSCustomObject]@{
+      B="Ready"
+      A="Submitted"
     }
+    #1.5  dotmplfi  ugly, ugly hack for single member of a Json List
+    #because we remove all the  [ and ] later as they are rejected by the api every other
+    #place except here and the history object
+    $dotmplfi = "openBracket" + "22a23acc-e1ef-444c-b08f-2134fa4b5a75" + "closeBracket"
 
-    #if the csv file exists rename it to .old and delete the old one
-    if (Test-Path -Path ('{0}\{1}.csv' -f $outFolderPath, $SPLLCTName)) 
-    {
-      Write-Verbose 'csv file exists, renaming'
-      $renamedFile = ('{0}\{1}.csv{2}' -f $outFolderPath, $SPLLCTName, '.old')
-      Move-Item -Path ('{0}\{1}.csv' -f $outFolderPath, $SPLLCTName) -Destination $renamedFile -Force
-      }
-      
-      #send the powershell object to a csv file for review
-      #seems to interfere with json export
-     # $cleanedList | Select-Object -Property id, correlationId, systemUpdate,title, complexObservation, complexRecommendation, complexArchivedRationale  | Export-Csv `
-     #-Path ('{0}\{1}.csv' -f $outFolderPath, $SPLLCTName) `
-     # -Force `
-     # -Encoding UTF8 `
-     # -NoTypeInformation
-
-      #'send the powershell object to a json file' 
-      convertTo-Json -InputObject $cleanedList -Depth 99 | Set-Content  `
-      -Path ('{0}\{1}.json' -f $outFolderPath, $SPLLCTName) `
-      -Encoding UTF8 -Force 
-      } #end of For each observation
   
+    #1.6 create history action
+    $histAction = @()
+    $histAction += [PSCustomObject]@{
+      actionId        ="Created"
+      actionContextId ="A"
+      actionBy        = $actionBy
+    }
+    #1.7 nest this in history Entry
+    $historyEntry = @()
+    $historyEntry += [PSCustomObject]@{
+        historyAction  = $histAction
+        actionAtUtc    = (Get-Date -Date $ListItem.Modified -Format $dateFormat)
+        assignedTo     = $null
+        complexDetails = $null
+    }
 
-    
-      if ($verbose)
-      {
-        Stop-Transcript
-      }
-  #clean up all cached variables
-  #Remove-Variable * -ErrorAction SilentlyContinue; Remove-Module *; $error.Clear(); Clear-Host;
+    #1.8 identification:  hard coded values should be changed
+    #to call some functions to map any data
+    $obsIdentification = @()
+    $obsIdentification+= [PSCustomObject]@{
+        l1Id = "8ce9e156-f9b6-44db-97bd-a93930f6b057"
+        l2Id = $null
+        globalTopicArea = "6c835eb8-ad2b-4698-93ef-921881118782"
+        activityList  = $null
+        keywordList   = $null
+        dotmlpfi      = $dotmplfi
+        riskSeverity  = "3704bf79-2998-4b34-a9a0-9267042f5f4c"
+        riskFrequency = "1ecb8d0f-b8d5-4bb6-b69a-e18041676684"
+    }
+    #1.9 modify action
+    $modifyAction = @()
+    $modifyAction += [PSCustomObject]@{
+        actionId = "Modified"
+        actionContextId = "A"
+        actionBy = $actionBy
+    }
+    #1.10 part A sub fields
+    $doc = New-Object -TypeName HtmlAgilityPack.HtmlDocument
+    $doc.LoadHtml($ListItem.Statement_x0020_of_x0020_Context)
+    #1.11 background
+    $complexBackground = @()
+    $complexBackground += [PSCustomObject]@{
+        value     = $textOpenPlaceHolder     + $doc.DocumentNode.InnerText + $textClosePlaceHolder
+        valueHtml = $textHtmlOpenPlaceHolder + $doc.DocumentNode.InnerText + $textHtmlClosePlaceHolder
+    }
+    #1.12 observation
+    $doc.LoadHtml($ListItem.Observations)
+    $complexObservation = @()
+    $complexObservation += @{
+        value     = $textOpenPlaceHolder     + $doc.DocumentNode.InnerText + $textClosePlaceHolder
+        valueHtml = $textHtmlOpenPlaceHolder + $doc.DocumentNode.InnerText + $textHtmlClosePlaceHolder
+    }
+    #1.13 recommendation
+    $doc.LoadHtml($ListItem.Recommendations)
+    $complexRecommendations = @()
+    $complexRecommendations += @{
+        value     = $textOpenPlaceHolder     + $doc.DocumentNode.InnerText + $textClosePlaceHolder
+        valueHtml = $textHtmlOpenPlaceHolder + $doc.DocumentNode.InnerText + $textHtmlClosePlaceHolder
+    }
 
-   
+    #1.14 part A
+    $partA = @()
+    $partA+= [PSCustomObject]@{
+        editUser      = $actionBy
+        nextUser      = $actionBy
+        modifyAction  = $modifyAction
+        actionAtUtc   = (Get-Date -Date $ListItem.Modified -Format $dateFormat)
+        submitAction  = $lastAction
+        archiveAction = $null
+        lastAction    = $null
+        submitNotification = $null
+        proceedLfr    = $null
+        complexBackground  = $complexBackground 
+        complexObservation = $complexObservation
+        complexRecommendations = $complexRecommendations
+        complexArchivedRationale = $null
+    }
+
+    $partB  = @()
+    $partB += [PSCustomObject]@{
+        editUser        = $actionBy
+        modifyAction    = $null
+        submitAction    = $null
+        archiveAction   = $null
+        lastAction      = $null
+        proceedLfr      = $null
+        complexFindings = $complexObservation
+        complexRecommendations = $complexRecommendations
+        complexArchiveRationale = $null
+    }
+ 
+
+    #2 create the json observation
+    $cleanedObs = @()
+    $cleanedObs += [PSCustomObject]@{
+        id     = $null
+        systemUpdate = $null
+        correlationId = $null
+        externalCorrelationId = $null
+        createAction = $createAction
+        lastAction   = $lastAction
+        lastSubmitToAction = $null
+        classificationLevelId= "92dce20c-e580-42c8-8156-1c05bd2b3dc8"
+        status = $status
+        isArchived = $false
+        attentionRequiredUsername = $username
+        observationNumber = $null
+        title = $ListItem.Title
+        attachmentList = $null  #when you pass null to an array it is entered as []
+        assignmententryList = $null
+        historyEntryList = $historyEntry
+        identification = $obsIdentification
+        partA = $partA
+        partB = $partB
+    }
+      
+
+    #3 send the powershell object to a json file 
+    $fileName = ('{0}_{1}.json' -f $SPLLCTName,$fileTitle )
+    convertTo-Json -InputObject $cleanedObs -Depth 99 | Set-Content  `
+    -Path  ('{0}\{1}' -f  $outFolderPath, $fileName) `
+    -Encoding $encodeFormat -Force 
+
+    #4 clean up 
+    #add the opening brackets back around the history entry
+    #add brackets around the dotmplfi list which the api only needs here
+    #replace the placeholders for large text fields with a special sequence
+    #that there is no good reason for except it doesnt work otherwise
+    $newPath =('N:\0_DGIMPD_DGRPGI\0_DPDCC\C2MP\DLLS\ExportedData\Staging\{0}' -f  $fileName)
+    Get-Content -Path ('{0}{1}' -f  $outFolderPath, $fileName) | ForEach-Object{
+        $_ -replace [Regex]::Escape("["),""  `
+           -replace [Regex]::Escape("]"), "" `
+           -replace "historyEntryList`":" ,"historyEntryList`": [" `
+           -replace [Regex]::Escape("""openBracket"), "[""" `
+           -replace [Regex]::Escape("closeBracket"""), """]" `
+           -replace $textOpenPlaceHolder, $textOpen `
+           -replace $textClosePlaceHolder, $textClose `
+           -replace $textHtmlOpenPlaceHolder, [Regex]::Escape($textHtmlOpen) `
+           -replace $textHtmlClosePlaceHolder, [Regex]::Escape($textHtmlClose) `
+    } | Set-Content $newPath
+
+    #put back a ] square bracket on line 71 as the API requires it for the history entry
+    $content = Get-Content -Path $newPath -Encoding $encodeFormat
+    $content[70] = '],'
+    $newPath =('N:\0_DGIMPD_DGRPGI\0_DPDCC\C2MP\DLLS\ExportedData\{0}' -f $fileName )
+    $content | Set-Content -Path $newPath -Encoding $encodeFormat
+
+  } #end for each   
+
+    if ($PSCmdlet.MyInvocation.BoundParameters['Verbose'].IsPresent)
+  {
+    Stop-Transcript
+  }
 
 } #end function
 
@@ -735,7 +852,7 @@ function script:Import-JsonToDLLS{
       A string representing the folder path
 
       .OUTPUTS
-      One csv file json file located in the inFolderPath parameter
+      A response from the Swagger API
 
       .EXAMPLE
 
@@ -758,7 +875,10 @@ function script:Import-JsonToDLLS{
     [string]$inFolderPath,
     [Parameter(Mandatory,
     HelpMessage='Enter the uri to the API where the json files will be written')] 
-    [string]$outUri)
+    [string]$outUri) #,
+    #[Parameter(Mandatory,
+    #HelpMessage='Enter the short form name of the list to be imported')] 
+    #[String]$spListName)
 
   
 
@@ -825,7 +945,7 @@ function script:Import-JsonToDLLS{
   {
     $inFile  = $inFolderPath + '\' + $jsonFile.Name
     $trimmedFileName = $jsonFile.BaseName
-    $json = Get-Content $inFile -Raw -Encoding UTF8
+    $json = Get-Content $inFile -Raw -Encoding $encodeFormat
 
     try{
 
@@ -833,9 +953,15 @@ function script:Import-JsonToDLLS{
         $response = Invoke-RestMethod -Uri $outUri -Headers $headers -Method Post -Body $json -ContentType "application/json" 
        }
     catch {
-        Write-Error $response.Detail
+        Write-Output "`n"
+        Write-Error $_.Exception
+        Write-Output $response.details
+        Write-Output "`n"
        }
-       Write-Host $trimmedFileName " processed with details=" $response
+       Write-Output "`n"
+       Write-Output $trimmedFileName " processed with details=" 
+       Write-Output "`n"
+       Write-Output $response
   } #end for each
 } #end function
 
