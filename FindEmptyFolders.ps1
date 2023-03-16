@@ -1,0 +1,1 @@
+(gci D:\Books -r | ? {$_.PSIsContainer -eq $True}) | ?{$_.GetFileSystemInfos().Count -eq 0} | select FullName
