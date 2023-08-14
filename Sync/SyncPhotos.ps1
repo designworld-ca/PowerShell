@@ -1,4 +1,4 @@
-
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
 # sync photos from pc to plex media server
 
 $CMD = "C:\Program Files\FreeFileSync\FreeFileSync.exe"

@@ -1,4 +1,7 @@
-﻿Get-ProvisionedAppxPackage -Online | `
+﻿Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
+
+
+Get-ProvisionedAppxPackage -Online | `
 
 Where-Object { $_.PackageName -match "xbox" } | `
 
