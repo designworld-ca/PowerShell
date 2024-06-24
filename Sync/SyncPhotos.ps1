@@ -3,6 +3,6 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
 
 $CMD = "C:\Program Files\FreeFileSync\FreeFileSync.exe"
 
-$arg1 = "D:\Documents\PersonalDocuments\Batch Jobs\BatchRun.ffs_batch"
+$arg1 = "D:\Documents\_Documents\PersonalDocuments\Batch Jobs\BatchRun.ffs_batch"
 
 & $CMD $arg1
